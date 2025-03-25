@@ -85,5 +85,7 @@ This is the place for you to write reflections:
 ### Mandatory (Subscriber) Reflections
 
 #### Reflection Subscriber-1
+1. Dalam tutorial ini, `RwLock<>` digunakan untuk sinkronisasi dan bukan `Mutex<>` karena `Mutex<>` tidak membedakan antara *thread* yang melakukan operasi *read* atau *write*; semua operasi akan menyebabkan *blocking* sehingga hanya satu *thread* yang dapat menggunakan *resource* tersebut pada satu waktu. Di sisi lain, `RwLock<>` membedakan antara *thread* yang melakukan operasi *read* dan *write* sehingga semua *thread* yang hanya ingin melakukan *read* bisa mendapatkan *lock* (akses kepada *resource*), tetapi hanya ada satu thread yang dapat memegang *lock* untuk *write*. Karena backend ini berperan sebagai *receiver*, maka tidak ada keperluan untuk melakukan *write* ke `NOTIFICATION` sehingga `RwLock<>` cocok untuk memastikan semua *thread* mengakses *resource* `NOTIFICATION` secara *thread-safe*.
+2. Dalam Rust, kita terpaksa menggunakan `lazy_static` karena Rust mewajibkan program kita *thread-safe*. Dalam Java, variabel *static* menjamin bahwa hanya terdapat satu instance variabel itu dalam satu *class*, tetapi variabel itu bisa saja diakses dan diubah oleh banyak *thread* sekaligus yang dapat menimbulkan masalah seperti *race condition*. Oleh karena itu, Rust melarang kita untuk menggunakan *static* mentah seperti itu dan kita harus menerapkan *static* yang *thread-safe* seperti `lazy_static`.
 
 #### Reflection Subscriber-2
